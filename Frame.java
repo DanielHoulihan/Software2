@@ -1,84 +1,65 @@
-
 public class Frame {
 
-	static char[] Frame = new char[7];
+	String[] frame;
+    Pool pool;
+    int frameCount;
 
-	public static void Letters() {
+	public Frame(Pool pool) {
+        this.pool=pool;
+        this.frame = new String [7];
+        this.frame[0]=this.pool.randomTile();
+        this.frame[1]=this.pool.randomTile();
+        this.frame[2]=this.pool.randomTile();
+        this.frame[3]=this.pool.randomTile();
+        this.frame[4]=this.pool.randomTile();
+        this.frame[5]=this.pool.randomTile();
+        this.frame[6]=this.pool.randomTile();
+        frameCount=7;
+    }
 
-		Frame[0] = 'A';
-		Frame[1] = ' ';
-		Frame[2] = 'Q';
-		Frame[3] = 'P';
-		Frame[4] = ' ';
-		Frame[5] = 'L';
-		Frame[6] = 'D';
+    public void refillFrame(){
+        for(int i=0; i<7; i++){
+            if(frame[i].equals("@")){
+                frame[i]=pool.randomTile();
+                frameCount++;
+            }
+        }
+    }
 
-		System.out.println("Stored");
+    public void removeLetter(String l){
+            for(int i = 0; i < 7; i++) {
+                if(frame[i].equals(l)) {
+                    frame[i]="@";
+                    break;
+                }
+            }
+            frameCount--;
+    }
 
-	}
-
-	public static void Check() {
-
-		boolean FrameLetter = false;
-		char letter = 'A';
-
+	public boolean areLettersInFrame(String l) {
+        boolean check=false;
 		for(int i = 0; i < 7; i++) {
-			if(Frame[i] == letter) {
-				FrameLetter = true;
+			if(frame[i].equals(l)) {
+				check=true;
 			}
-		}
-		System.out.println(FrameLetter);
+        }
+        return check;
 	}
 
-	public static void CheckNull() {
+	public boolean checkNull() {
+        // if(frameCount==0){
+        //     return true;
+        // }
+        // else return false;
+        return (frameCount==0); //if true returning true, else returning false
+   }
 
-		boolean isNull = true;
-
-		for(int i = 0; i < 7; i++) {
-			if(Frame[i] != ' ') {
-				isNull = false;
-				break;
-			}
-		}
-		System.out.println(isNull);
+	public String displayFrame() {
+        String frameDisplay="";
+        for(int i=0; i<7; i++){
+            frameDisplay+=frame[i];
+        }
+        return frameDisplay;
 	}
 
-	public static void Display() {
-
-		System.out.println(Frame);
-
-	}
-
-	public static void Refill() {
-
-		for(int i = 0; i < 7; i++) {
-			if(Frame[i] == ' ') {
-				Frame[i] = 'Z';
-			}
-		}
-		System.out.println(Frame);
-	}
-
-	public static void Remove() {
-
-		for(int i = 0; i < 7; i++) {
-			if(Frame[i] == 'L') {
-				Frame[i] = ' ';
-			}
-		}
-		System.out.println(Frame);
-	}
-
-
-
-	public static void main(String[] args) {
-
-		Letters();
-		Check();
-		CheckNull();
-		Display();
-		Refill();
-		Remove();
-
-	}
-	}
+}
