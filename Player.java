@@ -4,12 +4,13 @@ public class Player {
 
     int score;
     String name;
-    //Frame frame = new Frame();
+    Frame frame;
+    
 
-    public Player(String name){
+    public Player(String name, Frame frame){
         this.name=name;
         this.score=0;
-        //this.frame=new Frame();
+        this.frame=frame;
     }
 
 	public void setName(String name) {
@@ -20,9 +21,9 @@ public class Player {
         return score;
     }
 
-    // public Frame getFrame(){
-    //     return frame.displayFrame();
-    // }
+    public String getFrame(){ 
+        return frame.displayFrame();
+    }
 
     public String getName(){
         return name;
@@ -32,10 +33,10 @@ public class Player {
         score += wordValue;
     }
 
-    public void resetPlayer(){
-        this.name="";
+    public void resetPlayer(String name, Frame frame){
+        this.name=name;
         this.score=0;
-        //this.frame=new Frame();
+        this.frame=frame;
     }
 	
 

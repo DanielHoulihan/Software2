@@ -15,31 +15,31 @@ public Pool(){
 public void fillPool(){
     tiles= new HashMap <>();
     tiles.put("A", Arrays.asList(9, 1));
-    tiles.put("B", Arrays.asList(2, 2));
-    tiles.put("C", Arrays.asList(2, 1));
+    tiles.put("B", Arrays.asList(2, 3));
+    tiles.put("C", Arrays.asList(2, 3));
     tiles.put("D", Arrays.asList(4, 2));
     tiles.put("E", Arrays.asList(12, 1));
-    tiles.put("F", Arrays.asList(2, 2));
-    tiles.put("G", Arrays.asList(3, 1));
-    tiles.put("H", Arrays.asList(2, 2));
+    tiles.put("F", Arrays.asList(2, 4));
+    tiles.put("G", Arrays.asList(3, 2));
+    tiles.put("H", Arrays.asList(2, 4));
     tiles.put("I", Arrays.asList(9, 1));
-    tiles.put("J", Arrays.asList(1, 2));
-    tiles.put("K", Arrays.asList(1, 1));
-    tiles.put("L", Arrays.asList(4, 2));
-    tiles.put("M", Arrays.asList(2, 1));
-    tiles.put("N", Arrays.asList(6, 2));
+    tiles.put("J", Arrays.asList(1, 8));
+    tiles.put("K", Arrays.asList(1, 5));
+    tiles.put("L", Arrays.asList(4, 1));
+    tiles.put("M", Arrays.asList(2, 3));
+    tiles.put("N", Arrays.asList(6, 1));
     tiles.put("O", Arrays.asList(8, 1));
-    tiles.put("P", Arrays.asList(2, 2));
-    tiles.put("Q", Arrays.asList(1, 1));
-    tiles.put("R", Arrays.asList(6, 2));
+    tiles.put("P", Arrays.asList(2, 3));
+    tiles.put("Q", Arrays.asList(1, 10));
+    tiles.put("R", Arrays.asList(6, 1));
     tiles.put("S", Arrays.asList(4, 1));
-    tiles.put("T", Arrays.asList(6, 2));
+    tiles.put("T", Arrays.asList(6, 1));
     tiles.put("U", Arrays.asList(4, 1));
-    tiles.put("V", Arrays.asList(2, 2));
-    tiles.put("W", Arrays.asList(2, 1));
-    tiles.put("X", Arrays.asList(1, 2));
-    tiles.put("Y", Arrays.asList(2, 1));
-    tiles.put("Z", Arrays.asList(1, 2));
+    tiles.put("V", Arrays.asList(2, 4));
+    tiles.put("W", Arrays.asList(2, 4));
+    tiles.put("X", Arrays.asList(1, 8));
+    tiles.put("Y", Arrays.asList(2, 4));
+    tiles.put("Z", Arrays.asList(1, 10));
     tiles.put("*", Arrays.asList(2, 0));
 }
 
@@ -57,7 +57,7 @@ public int getAmountOfTiles(String l){
     return tiles.get(l).get(0);
 }
 
-public void reset(){
+public void resetPool(){
     fillPool();
 }
 
@@ -72,7 +72,6 @@ public int tilesLeftInPool(){
 public boolean checkIfEmpty(){
     int total=0;
     for(String s : tiles.keySet()){
-        //System.out.println(getAmountOfTiles(s));
         total+=getAmountOfTiles(s);
     }
     if(total==0){

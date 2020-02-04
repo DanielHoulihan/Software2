@@ -47,10 +47,6 @@ public class Frame {
 	}
 
 	public boolean checkNull() {
-        // if(frameCount==0){
-        //     return true;
-        // }
-        // else return false;
         return (frameCount==0); //if true returning true, else returning false
    }
 
@@ -61,5 +57,6 @@ public class Frame {
         }
         return frameDisplay;
 	}
+
 
 }
