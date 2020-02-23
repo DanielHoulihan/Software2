@@ -32,19 +32,14 @@ public class PlayerTest{
         System.out.println(player.getFrame());
 
         Board board = new Board();
-        board.createBoard(square);
-        //board.printBoard();
-        board.placeWord(5, 10, "right", new String[]{"H", "E", "L"}, frame);
-        //board.placeWord(6, 5, "right", new String[]{"H"}, frame1);
+        board.board(square);
+        board.placeWord(7, 7, "right", new String[]{"H", "E", "L"}, frame);
+        board.placeWord(6, 6, "down", new String[]{"H", "E", "L"}, frame);
 
-//        board.resetBoard();
-//        board.board();
 
-        //System.out.println("Is letter A in the frame: "+frame.areLettersInFrame("A"));
-        // frame.removeLetter("A");
-        // System.out.println("After A removed: " + frame.displayFrame());
-        // frame.refillFrame();
-        // System.out.println("New frame: " + frame.displayFrame());
+        //board.placeWord(5, 5, "down", new String[]{"H", "E", "L"}, frame);
+        System.out.println(board.areLettersValid(frame, new String[]{"H", "E", "L"}));
+
 
     }
 
