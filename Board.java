@@ -2,38 +2,51 @@ import java.util.Arrays;
 
 public class Board {
 
-
+    public int count=0;
     Square square;
     String board[][] = new String[15][15];
 
 
-    public void placeWord(int x, int y, String direction, String[] l, Frame frame) {
-        int count = 0;
+    public void placeValidWord(int x, int y, String direction, String[] l, Frame frame) {
         if (x >= 15 || x < 0) {
             System.out.println("x must be between 1 and 15");
         }
         if (y >= 15 || y < 0) {
             System.out.println("y must be between 1 and 15");
         }
+        if (count==0){
+            if(validStartPoint(x, y, l)){
+                placeWord(x, y, direction, l, frame);
+                printBoard();
+            }
+        }
+        if(count>0){
+            if(notOnAnotherWord(x, y)==true) {
+                placeWord(x, y, direction, l, frame);
+                printBoard();
+            }
+        }
 
 
-            if (validStartPoint(x, y, l)) {
-                for (int k = 0; k < l.length; k++) {
-                    if (areLettersValid(frame, l) == true) {
-                        if (direction.equals("down")) {
-                            for (int j = 0; j < l.length; j++) {
-                                board[y + (j)][x] = l[j] + " ";
-                            }
-                        }
-                        if (direction.equals("right")) {
-                            for (int j = 0; j < l.length; j++) {
-                                board[y][x + (j)] = l[j] + " ";
-                            }
-                        }
-                        count++;
+        }
+
+
+
+    public void placeWord(int x, int y, String direction, String[] l, Frame frame) {
+        for (int k = 0; k < l.length; k++) {
+            if (areLettersValid(frame, l) == true) {
+                if (direction.equals("down")) {
+                    for (int j = 0; j < l.length; j++) {
+                        board[y + (j)][x] = l[j] + " ";
                     }
                 }
-            printBoard();
+                if (direction.equals("right")) {
+                    for (int j = 0; j < l.length; j++) {
+                        board[y][x + (j)] = l[j] + " ";
+                    }
+                }
+            }
+            count++;
         }
     }
 
@@ -64,24 +77,23 @@ public boolean areLettersValid(Frame frame, String[] l) {
 }
 
 
-public boolean notOnAnotherWord(int x, int y, String[] l){
-    for(int i=0; i<l.length; i++){
-        if(board[x+i][y].equals("+ ") || board[x+i][y].equals("- ") || board[x+i][y].equals("% ") || board[x+i][y].equals("* ")){
+public boolean notOnAnotherWord(int x, int y){
+    //for(int i=0; i<l.length; i++){
+        if(board[x][y].equals("+ ")){
             return true;
         }
-    }
+        if(board[x][y].equals("* ")){
+            return true;
+        }
+        if(board[x][y].equals("% ")){
+            return true;
+        }
+        if(board[x][y].equals("- ")){
+            return true;
+        }
+   // }
     return false;
     }
-
-//    public boolean overlapping(){
-//        if(board[7][7].equals("@ ")){
-//            return false;
-//        }
-//        else return true;
-//    }
-
-
-
 
 
     public void resetBoard() {
@@ -177,6 +189,8 @@ public void printBoard() {
         System.out.println();
     }
 }
+
+
 }
 
 

@@ -31,14 +31,13 @@ public class PlayerTest{
         System.out.println("player score for p2 is " + player1.getScore());
         System.out.println(player.getFrame());
 
-        Board board = new Board();
-        board.board(square);
-        board.placeWord(7, 7, "right", new String[]{"H", "E", "L"}, frame);
-        board.placeWord(6, 6, "down", new String[]{"H", "E", "L"}, frame);
-
-
-        //board.placeWord(5, 5, "down", new String[]{"H", "E", "L"}, frame);
-        System.out.println(board.areLettersValid(frame, new String[]{"H", "E", "L"}));
+//        Board board = new Board();
+//        board.board(square);
+//        board.placeValidWord(7, 7, "right", new String[]{"H", "E", "L"}, frame);
+//        board.placeValidWord(8, 8, "right", new String[]{"L", "E", "H"}, frame);
+//        board.placeValidWord(7, 7, "right", new String[]{"T"}, frame);
+//        //board.placeValidWord(8, 7, "down", new String[]{"H", "E", "L"}, frame);
+//        System.out.println(board.notOnAnotherWord(8, 9));
 
 
     }
