@@ -1,45 +1,111 @@
-import java.util.*;
-public class PlayerTest{
+import java.util.ArrayList;
 
-    public static void main(String [] args){
+public class PlayerTest {
 
-        // Map <String, List<Integer>> tiles = pool.getTiles();
-        // System.out.println(tiles.get("A"));
-        Square square = new Square();
+    // For full marks, you should include automated comparison between actual and expected results
+
+    public static void main (String[] args) {
+
+        // Test draw random tiles
         Pool pool = new Pool();
-        System.out.println("There are " + pool.tilesLeftInPool() + " tiles in the pool");
-        Frame frame = new Frame(pool);
-        Frame frame1 = new Frame(pool);
-        Player player = new Player("Daniel", frame);
-        Player player1 = new Player("Jack", frame1);
-        System.out.println("player name for p1 is " + player.getName());
-        System.out.println("player name for p2 is " + player1.getName());
-        System.out.println("The frame for p1 is " + frame.displayFrame());
-        System.out.println("The frame for p2 is " + frame1.displayFrame());
-        System.out.println("There are now " + pool.tilesLeftInPool() + " tiles in the pool");
-        System.out.println("value of tile J is " + pool.getValueOfTile("J"));
-        System.out.println("amount of tiles of J is " + pool.getAmountOfTiles("J"));
-        System.out.println("Random tile: " + pool.randomTile());
-        System.out.println("Pool empty: " + pool.checkIfEmpty());
-        //pool.resetPool();
-        player.resetPlayer("Shane", frame);
-        System.out.println("player score for p1 is " + player.getScore());
-        System.out.println("player score for p2 is " + player1.getScore());
-        player.increaseScore(5);
-        player1.increaseScore(9);
-        System.out.println("player score for p1 is " + player.getScore());
-        System.out.println("player score for p2 is " + player1.getScore());
-        System.out.println(player.getFrame());
+        System.out.println(pool.size());
+        System.out.println("Expected: 100\n");
 
-//        Board board = new Board();
-//        board.board(square);
-//        board.placeValidWord(7, 7, "right", new String[]{"H", "E", "L"}, frame);
-//        board.placeValidWord(8, 8, "right", new String[]{"L", "E", "H"}, frame);
-//        board.placeValidWord(7, 7, "right", new String[]{"T"}, frame);
-//        //board.placeValidWord(8, 7, "down", new String[]{"H", "E", "L"}, frame);
-//        System.out.println(board.notOnAnotherWord(8, 9));
+        ArrayList<Tile> draw = pool.drawTiles(1);
+        System.out.printf("%s\n",draw);
+        System.out.println(pool.size());
+        System.out.println("Expected: 99\n");
+
+        draw = pool.drawTiles(7);
+        System.out.printf("%s\n",draw);
+        System.out.println(pool.size());
+        System.out.println("Expected: 92\n");
 
 
+        // Test pool empty
+        pool = new Pool();
+        boolean empty = pool.isEmpty();
+        System.out.printf("Pool empty? %b\n",empty);
+        System.out.printf("Expected: false\n");
+        for (int i=0; i<99; i++) {
+            draw = pool.drawTiles(1);
+            System.out.print(draw);
+        }
+        System.out.println();
+        System.out.println(pool.size());
+        empty = pool.isEmpty();
+        System.out.printf("Pool empty? %b\n",empty);
+        System.out.printf("Expected: false\n");
+        draw = pool.drawTiles(1);
+        System.out.println(draw);
+        System.out.printf("Expected: 1 letter\n");
+        System.out.println(pool.size());
+        System.out.printf("Expected: 0\n");
+        empty = pool.isEmpty();
+        System.out.printf("Pool empty? %b\n",empty);
+        System.out.printf("Expected: true\n");
+        draw = pool.drawTiles(7);
+        System.out.printf("%s\n",draw);
+        System.out.printf("Expected: empty\n");
+
+        // Test player names
+        Player player1 = new Player(), player2 = new Player();
+        player1.setName("Chris");
+        player2.setName("Jack");
+        System.out.println(player1.getName());
+        System.out.printf("Expected: Chris\n");
+        System.out.println(player2.getName());
+        System.out.printf("Expected: Jack\n");
+
+        // Test scoring
+        System.out.println(player1.getScore());
+        System.out.printf("Expected: 0\n");
+        player1.addScore(10);
+        System.out.println(player1.getScore());
+        System.out.printf("Expected: 10\n");
+
+        // Test frames
+        pool = new Pool();
+        Frame frame = player1.getFrame();
+        empty = frame.isEmpty();
+        System.out.printf("Is empty? %b \n",empty);
+        System.out.printf("Expected: true\n");
+        System.out.println(frame);
+        System.out.printf("Expected: empty\n");
+        boolean available = frame.isAvailable("A");
+        System.out.println(available);
+        System.out.printf("Expected: false\n");
+        frame.refill(pool);
+        System.out.println(frame);
+        System.out.printf("Expected: 7 letters\n");
+        empty = frame.isEmpty();
+        System.out.printf("Is empty? %b\n",empty);
+        System.out.printf("Expected: false\n");
+        System.out.println(pool.size());
+        System.out.printf("Expected: 93\n");
+        draw = frame.getTiles();
+        String drawString = "";
+        for (int i=0; i<draw.size(); i++) {
+            drawString = drawString + draw.get(i).toString();
+        }
+        System.out.println(draw);
+        available = frame.isAvailable(drawString.substring(0,6));
+        System.out.println(available);
+        System.out.printf("Expected: true\n");
+        available = frame.isAvailable("X");
+        System.out.println(available);
+        System.out.printf("Expected: false\n");
+        frame.remove(drawString.substring(0,3));
+        System.out.println(frame);
+        System.out.printf("Expected: 4 left\n");
+        frame = player2.getFrame();
+        frame.refill(pool);
+        System.out.println(pool.size());
+        System.out.printf("Expected: 86\n");
+        System.out.println(frame);
+        System.out.printf("Expected: 7 left\n");
+        frame = player1.getFrame();
+        System.out.println(frame);
+        System.out.printf("Expected: 4 left\n");
     }
-
 }

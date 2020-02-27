@@ -1,41 +1,34 @@
+
 public class Player {
 
-    int score;                                    //Variable to keep the score.
-    String name;                                  //Variable to hold name.
-    Frame frame;
+    private String name;
+    private int score;
+    private Frame frame;
 
-
-    public Player(String name, Frame frame){      //constructor method for Player.
-        this.name=name;
-        this.score=0;                             //Initializes score to 0.
-        this.frame=frame;
+    Player () {
+        name = "";
+        score = 0;
+        frame = new Frame();
     }
 
-    public void setName(String name) {             //setter for name variable
-        this.name=name;
+    public void setName (String text) {
+        name = text;
     }
 
-    public int getScore(){                        //getter for score variable.
-        return score;                             //Returns score when called.
+    public String getName () {
+        return(name);
     }
 
-    public String getFrame(){
-        return frame.displayFrame();              //Returns a players Frame when called.
+    public void addScore (int increment) {
+        score = score + increment;
     }
 
-    public String getName(){
-        return name;                              //Returns a players name when called.
+    public int getScore() {
+        return(score);
     }
 
-    public void increaseScore(int wordValue){
-        score += wordValue;                       //Adds the value of the word onto the total of the players score.
+    public Frame getFrame() {
+        return(frame);
     }
-
-    public void resetPlayer(String name, Frame frame){
-        this.name=name;
-        this.score=0;                             //Resets score back to 0.
-        this.frame=frame;
-    }
-
 
 }

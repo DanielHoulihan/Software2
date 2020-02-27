@@ -1,196 +1,183 @@
-import java.util.Arrays;
-
 public class Board {
 
-    public int count=0;
-    Square square;
-    String board[][] = new String[15][15];
+    public static final int BOARD_SIZE = 15;
+    public static final int BOARD_CENTRE = 7;
 
+    private static final int[][] LETTER_MULTIPLIER =
+            { {1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1},
+                    {2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1},
+                    {1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1},
+                    {1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1},
+                    {1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1},
+                    {1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2},
+                    {1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} };
+    private static final int[][] WORD_MULTIPLIER =
+            { {3, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 3},
+                    {1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1},
+                    {1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1},
+                    {1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1},
+                    {1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {3, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 3},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1},
+                    {1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1},
+                    {1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1},
+                    {1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1},
+                    {3, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 3} };
 
-    public void placeValidWord(int x, int y, String direction, String[] l, Frame frame) {
-        if (x >= 15 || x < 0) {
-            System.out.println("x must be between 1 and 15");
-        }
-        if (y >= 15 || y < 0) {
-            System.out.println("y must be between 1 and 15");
-        }
-        if (count==0){
-            if(validStartPoint(x, y, l)){
-                placeWord(x, y, direction, l, frame);
-                printBoard();
+    public static final int WORD_INCORRECT_FIRST_PLAY = 0;
+    public static final int WORD_OUT_OF_BOUNDS = 1;
+    public static final int WORD_LETTER_NOT_IN_FRAME = 2;
+    public static final int WORD_LETTER_CLASH = 3;
+    public static final int WORD_NO_LETTER_PLACED = 4;
+    public static final int WORD_NO_CONNECTION = 5;
+
+    private Square[][] squares;
+    private int checkCode;
+    private int numPlays;
+
+    Board() {
+        squares = new Square[BOARD_SIZE][BOARD_SIZE];
+        for (int r=0; r<BOARD_SIZE; r++)  {
+            for (int c=0; c<BOARD_SIZE; c++)   {
+                squares[r][c] = new Square(LETTER_MULTIPLIER[r][c],WORD_MULTIPLIER[r][c]);
             }
         }
-        if(count>0){
-            if(notOnAnotherWord(x, y)==true) {
-                placeWord(x, y, direction, l, frame);
-                printBoard();
-            }
-        }
-
-
-        }
-
-
-
-    public void placeWord(int x, int y, String direction, String[] l, Frame frame) {
-        for (int k = 0; k < l.length; k++) {
-            if (areLettersValid(frame, l) == true) {
-                if (direction.equals("down")) {
-                    for (int j = 0; j < l.length; j++) {
-                        board[y + (j)][x] = l[j] + " ";
-                    }
-                }
-                if (direction.equals("right")) {
-                    for (int j = 0; j < l.length; j++) {
-                        board[y][x + (j)] = l[j] + " ";
-                    }
-                }
-            }
-            count++;
-        }
+        numPlays = 0;
     }
 
-
-public boolean validStartPoint(int x, int y, String[] l){
-        for(int i=0; i<l.length; i++){
-            if(board[x+i][y].equals("@ ")){
-                return true;
-            }
-            if(board[x][y+i].equals("@ ")){
-                return true;
-            }
-        }
-        return false;
-}
-
-public boolean areLettersValid(Frame frame, String[] l) {
-        int count=0;
-    for (int k = 0; k < l.length; k++) {
-        if (frame.areLettersInFrame(l[k]) == true) {
-            count++;
-        }
-        if(count==l.length){
-            return true;
-        }
-    }
-    return false;
-}
-
-
-public boolean notOnAnotherWord(int x, int y){
-    //for(int i=0; i<l.length; i++){
-        if(board[x][y].equals("+ ")){
-            return true;
-        }
-        if(board[x][y].equals("* ")){
-            return true;
-        }
-        if(board[x][y].equals("% ")){
-            return true;
-        }
-        if(board[x][y].equals("- ")){
-            return true;
-        }
-   // }
-    return false;
-    }
-
-
-    public void resetBoard() {
-        board(square);
-    }
-
-    public void board (Square square) {
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                board[i][j] = square.getBoardValue();
-            }
-        }
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                //triple word
-                if (board[0][0].equals("- "))     {   board[0][0] = "# ";      }
-                if (board[7][0].equals("- "))     {   board[7][0] = "# ";      }
-                if (board[0][7].equals("- "))     {   board[0][7] = "# ";      }
-                if (board[0][14].equals("- "))     {   board[0][14] = "# ";      }
-                if (board[14][0].equals("- "))     {   board[14][0] = "# ";      }
-                if (board[14][7].equals("- "))     {   board[14][7] = "# ";      }
-                if (board[7][14].equals("- "))     {   board[7][14] = "# ";      }
-                if (board[14][14].equals("- "))     {   board[14][14] = "# ";      }
-
-                //double word
-                if (board[1][1].equals("- "))     {   board[1][1] = "* ";      }
-                if (board[2][2].equals("- "))     {   board[2][2] = "* ";      }
-                if (board[3][3].equals("- "))     {   board[3][3] = "* ";      }
-                if (board[4][4].equals("- "))     {   board[4][4] = "* ";      }
-                if (board[1][13].equals("- "))     {   board[1][13] = "* ";      }
-                if (board[2][12].equals("- "))     {   board[2][12] = "* ";      }
-                if (board[3][11].equals("- "))     {   board[3][11] = "* ";      }
-                if (board[4][10].equals("- "))     {   board[4][10] = "* ";      }
-                if (board[13][1].equals("- "))     {   board[13][1] = "* ";      }
-                if (board[12][2].equals("- "))     {   board[12][2] = "* ";      }
-                if (board[11][3].equals(" "))     {   board[11][3] = "* ";      }
-                if (board[10][4].equals("- "))     {   board[10][4] = "* ";      }
-                if (board[10][10].equals("- "))     {   board[10][10] = "* ";      }
-                if (board[11][11].equals("- "))     {   board[11][11] = "* ";      }
-                if (board[12][12].equals("- "))     {   board[12][12] = "* ";      }
-                if (board[13][13].equals("- "))     {   board[13][13] = "* ";      }
-
-                //tripple letter
-                if (board[5][1].equals("- "))     {   board[5][1] = "+ ";      }
-                if (board[9][1].equals("- "))     {   board[9][1] = "+ ";      }
-                if (board[1][5].equals("- "))     {   board[1][5] = "+ ";      }
-                if (board[5][5].equals("- "))     {   board[5][5] = "+ ";      }
-                if (board[9][5].equals("- "))     {   board[9][5] = "+ ";      }
-                if (board[13][5].equals("- "))     {   board[13][5] = "+ ";      }
-                if (board[1][9].equals("- "))     {   board[1][9] = "+ ";      }
-                if (board[5][9].equals("- "))     {   board[5][9] = "+ ";      }
-                if (board[9][9].equals("- "))     {   board[9][9] = "+ ";      }
-                if (board[13][9].equals("- "))     {   board[13][9] = "+ ";      }
-                if (board[5][13].equals("- "))     {   board[5][13] = "+ ";      }
-                if (board[9][13].equals("- "))     {   board[9][13] = "+ ";      }
-
-                //double letter
-                if (board[3][0].equals("- "))     {   board[3][0] = "% ";      }
-                if (board[11][0].equals("- "))     {   board[11][0] = "% ";      }
-                if (board[6][2].equals("- "))     {   board[6][2] = "% ";      }
-                if (board[8][2].equals("- "))     {   board[8][2] = "% ";      }
-                if (board[0][3].equals("- "))     {   board[0][3] = "% ";      }
-                if (board[7][3].equals("- "))     {   board[7][3] = "% ";      }
-                if (board[14][3].equals("- "))     {   board[14][3] = "% ";      }
-                if (board[2][6].equals("- "))     {   board[2][6] = "% ";      }
-                if (board[6][6].equals("- "))     {   board[6][6] = "% ";      }
-                if (board[8][6].equals("- "))     {   board[8][6] = "% ";      }
-                if (board[12][6].equals("- "))     {   board[12][6] = "% ";      }
-                if (board[3][7].equals("- "))     {   board[3][7] = "% ";      }
-                if (board[11][7].equals("- "))     {   board[11][7] = "% ";      }
-                if (board[2][8].equals("- "))     {   board[2][8] = "% ";      }
-                if (board[6][8].equals("- "))     {   board[6][8] = "% ";      }
-                if (board[8][8].equals("- "))     {   board[8][8] = "% ";      }
-                if (board[12][8].equals("- "))     {   board[12][8] = "% ";      }
-                if (board[0][11].equals("- "))     {   board[0][11] = "% ";      }
-                if (board[7][11].equals("- "))     {   board[7][11] = "% ";      }
-                if (board[14][11].equals("- "))     {   board[14][11] = "% ";      }
-                if (board[6][12].equals("- "))     {   board[6][12] = "% ";      }
-                if (board[8][12].equals("- "))     {   board[8][12] = "% ";      }
-                if (board[3][14].equals("- "))     {   board[3][14] = "% ";      }
-                if (board[11][14].equals("- "))     {   board[11][14] = "% ";      }
-                //starting point
-                if (board[7][7].equals("- "))     {   board[7][7] = "@ ";      }
-            }
-        }
-    }
-
-public void printBoard() {
-    for (int i = 0; i < 15; i++) {
-        for (int j = 0; j < 15; j++) {
-            System.out.print(board[i][j]);
+    public void display () {
+        System.out.print("    ");
+        for (int c = 0; c< BOARD_SIZE; c++) {
+            System.out.printf("%c ",(char) ((int) 'A' + c));
         }
         System.out.println();
+        for (int r = 0; r< BOARD_SIZE; r++) {
+            System.out.printf("%2d  ", r+1);
+            for (int c = 0; c< BOARD_SIZE; c++) {
+                if (squares[r][c].isOccupied()) {
+                    System.out.printf("%c ",squares[r][c].getTile().getLetter());
+                }
+                else {
+                    if (squares[r][c].isDoubleLetter()) {
+                        System.out.print("dl");
+                    } else if (squares[r][c].isTripleLetter()) {
+                        System.out.print("tl");
+                    } else if (squares[r][c].isDoubleWord()) {
+                        System.out.print("dw");
+                    } else if (squares[r][c].isTripleWord()) {
+                        System.out.print("tw");
+                    } else {
+                        System.out.print("  ");
+                    }
+                }
+            }
+            System.out.printf("  %2d\n", r+1);
+        }
     }
+
+    public boolean isLegal(Frame frame, Word word) {
+        boolean isLegal = true;
+        //check for invalid first play
+        if (numPlays == 0 &&
+                ((word.isHorizontal() && (word.getRow()!=BOARD_CENTRE || word.getFirstColumn()>BOARD_CENTRE ||
+                        word.getLastColumn()<BOARD_CENTRE)) ||
+                        (word.isVertical() && (word.getColumn()!=BOARD_CENTRE || word.getFirstRow()>BOARD_CENTRE ||
+                                word.getLastRow()<BOARD_CENTRE)))) {
+            isLegal = false;
+            checkCode = WORD_INCORRECT_FIRST_PLAY;
+        }
+        // check for word out of bounds
+        if (isLegal && ((word.isHorizontal() && word.getLastColumn()>= BOARD_SIZE) ||
+                (word.isVertical() && word.getLastRow()>= BOARD_SIZE))) {
+            isLegal = false;
+            checkCode = WORD_OUT_OF_BOUNDS;
+        }
+        // check that letters in the word do not clash with those on the board
+        String lettersPlaced = "";
+        if (isLegal) {
+            int r = word.getFirstRow();
+            int c = word.getFirstColumn();
+            for (int i = 0; i < word.getLength() && isLegal; i++) {
+                if (squares[r][c].isOccupied() && squares[r][c].getTile().getLetter() != word.getLetter(i)) {
+                    isLegal = false;
+                    checkCode = WORD_LETTER_CLASH;
+                } else if (!squares[r][c].isOccupied()) {
+                    lettersPlaced = lettersPlaced + word.getLetter(i);
+                }
+                if (word.isHorizontal()) {
+                    c++;
+                } else {
+                    r++;
+                }
+            }
+        }
+        // check that more than one letter is placed
+        if (isLegal && lettersPlaced.length() == 0) {
+            isLegal = false;
+            checkCode = WORD_NO_LETTER_PLACED;
+        }
+        // check that the letters placed are in the frame
+        if (isLegal && !frame.isAvailable(lettersPlaced)) {
+            isLegal = false;
+            checkCode = WORD_LETTER_NOT_IN_FRAME;
+        }
+        // check that the letters placed connect with the letters on the board
+        if (isLegal && numPlays!=0) {
+            int boxTop = Math.max(word.getFirstRow()-1,0);
+            int boxBottom = Math.min(word.getLastRow()+1, BOARD_SIZE-1);
+            int boxLeft = Math.max(word.getFirstColumn()-1,0);
+            int boxRight = Math.min(word.getLastColumn()+1, BOARD_SIZE-1);
+            boolean foundConnection = false;
+            for (int r=boxTop; r<=boxBottom && !foundConnection; r++) {
+                for (int c=boxLeft; c<=boxRight && !foundConnection; c++) {
+                    if (squares[r][c].isOccupied()) {
+                        foundConnection = true;
+                    }
+                }
+            }
+            if (!foundConnection) {
+                isLegal = false;
+                checkCode = WORD_NO_CONNECTION;
+            }
+        }
+        return isLegal;
+    }
+
+    // getCheckCode precondition: isLegal is false
+    public int getCheckCode() {
+        return checkCode;
+    };
+
+    // place precondition: isLegal is true
+    public void place(Frame frame, Word word) {
+        int r = word.getFirstRow();
+        int c = word.getFirstColumn();
+        for (int i=0; i<word.getLength(); i++) {
+            if (!squares[r][c].isOccupied()) {
+                char letter = word.getLetter(i);
+                Tile tile = frame.getTile(letter);
+                squares[r][c].add(tile);
+                frame.remove(tile);
+            }
+            if (word.isHorizontal()) {
+                c++;
+            } else {
+                r++;
+            }
+        }
+        numPlays++;
+    }
+
 }
-
-
-}
-
-
