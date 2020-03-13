@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+   <top>
+      <VBox style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar VBox.vgrow="ALWAYS">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <Pane style="-fx-background-image: ;" BorderPane.alignment="CENTER">
+         <opaqueInsets>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </opaqueInsets></Pane>
+   </center>
+   <left>
+      <VBox spacing="3.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Enter Player 1 Name" textAlignment="CENTER">
+               <font>
+                  <Font name="Times New Roman" size="17.0" />
+               </font>
+            </Label>
+            <TextField />
+            <Button mnemonicParsing="false" text="Confirm" />
+            <Label text="Enter Player 2 Name">
+               <font>
+                  <Font name="Times New Roman" size="17.0" />
+               </font>
+            </Label>
+            <TextField />
+            <Button mnemonicParsing="false" text="Confirm" />
+            <VBox prefHeight="368.0" prefWidth="200.0" style="-fx-background-color: white;">
+               <children>
+                  <Label text="Scoring" textAlignment="CENTER" underline="true" VBox.vgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </left>
+   <bottom>
+      <VBox prefHeight="200.0" prefWidth="888.0" style="-fx-background-color: brown" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>
